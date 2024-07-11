@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  font-size: 16px;
+  font-family: "Prompt";
+  --primaryColor: #33363F;
+  --white: #DEDEDE;
+}
+
+* {
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: whitesmoke;
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  left: 0px;
+  right: 0px;
+  background-color: var(--primaryColor);
+  padding: 0px 40px;
+  color: var(--white);
+  z-index: 2;
+}
+
+header h1 {
+  font-size: 2.5rem;
+}
+
+section {
+  flex: 1;
+  background-color: red;
+  display: flex;
+}
+
+section sidebar {
+  height: 100%;
+  width: 200px;
+  background-color: white;
+  z-index: 1;
+}
+
+sidebar .default-navs {
+  margin-top: 16px;
+  padding: 20px 20px 20px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.default-navs .default-nav {
+  background-color: whitesmoke;
+  width: 100%;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  transition: all 0.15s;
+}
+
+.default-nav .design {
+  background-color: rgb(0, 0, 0, 0.2);
+  height: 100%;
+  width: 10px;
+}
+
+.default-nav p {
+  pointer-events: none;
+}
+
+.default-nav:hover {
+  color: var(--white);
+  background-color: var(--primaryColor);
+  transform: translateX(10px);
+}
+
+.projects {
+  padding: 20px 15px;
+}
+
+.projects .project-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-options>div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus-icon {
+  border: none;
+  background-color: transparent;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plus-icon:hover {
+  background-color: whitesmoke;
+}
+
+.projects .project-container {
+  margin-top: 6px;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.project-container .project {
+  flex: 1;
+  background-color: whitesmoke;
+  border-radius: 3px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.project p {
+  pointer-events: none;
+}
+
+.project.active {
+  background-color: var(--primaryColor);
+  color: var(--white);
+}
+
+.default-nav.active {
+  background-color: var(--primaryColor);
+  color: var(--white);
+  transform: translateX(10px);
+}
+
+
+section main {
+  flex: 1;
+  background-color: whitesmoke;
+  position: relative;
+}
+
+#project-modal, #task-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--white);
+  background-color: var(--primaryColor);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 30px 20px;
+  display: none;
+  flex-direction: column;
+}
+
+#project-modal.show,
+#task-modal.show {
+  display: flex;
+}
+
+#project-modal input{
+  margin-top: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  width: 300px;
+}
+
+.create {
+  margin-top: 16px;
+  align-self: center;
+  border: 1px solid var(--white);
+  background-color: var(--primaryColor);
+  color: var(--white);
+  font-size: 1.5rem;
+  border-radius: 5px;
+}
+
+.close-modal-btn {
+  position: absolute;
+  border: none;
+  background-color: var(--primaryColor);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.5rem;
+  top: 5px;
+  right: 5px;
+}
+
+#task-modal > div {
+  display: flex;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+#task-modal .left {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
+#task-modal #task-name-input {
+  padding: 5px 8px;
+  width: 200px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+#task-modal #task-description-input {
+  padding: 5px 8px;
+  height: 120px;
+  resize: none;
+}
+
+#task-modal .right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.right select {
+  width: 115px;
+}
+
+.right p {
+  font-size: 0.8rem;
+}
