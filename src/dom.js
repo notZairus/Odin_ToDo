@@ -1,3 +1,4 @@
+import { Project, globalContainer } from "./objects";
 
 export const DOM = (function () {
 
@@ -19,8 +20,18 @@ export const DOM = (function () {
     targetNav.classList.add('active');
   }
 
+  function displayProject(project) {
+    const header = document.querySelector('.h1-container h1'); 
+    header.textContent = project.getTitle();
+
+    project.getTasks().forEach(task => {
+      //GAWIN KO BUKASSSSS
+    })
+  } 
+
   return {
-    activateNav
+    activateNav,
+    displayProject
   }
 
 })();
