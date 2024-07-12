@@ -144,13 +144,6 @@ sidebar .default-navs {
   transform: translateX(10px);
 }
 
-
-section main {
-  flex: 1;
-  background-color: whitesmoke;
-  position: relative;
-}
-
 #project-modal, #task-modal {
   position: absolute;
   top: 50%;
@@ -236,4 +229,50 @@ section main {
 
 .right p {
   font-size: 0.8rem;
+}
+
+
+section main {
+  flex: 1;
+  background-color: whitesmoke;
+  position: relative;
+  display: flex;
+  padding: 32px 40px;
+}
+
+main .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content .h1-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.content .h1-container h1 {
+  background-color: var(--primaryColor);
+  color: var(--white);
+  padding: 15px;
+  border-radius: 5px;
+  flex: 1;
+}
+
+.content .h1-container button {
+  background-color: var(--white);
+  border: none;
+  font-size: 1rem;
+  padding: 22px;
+  font-weight: 700;
+  border-radius: 5px;
+}
+
+.content .task-container {
+  background-color: white;
+  border-radius: 5px;
+  flex: 1;
+
 }
