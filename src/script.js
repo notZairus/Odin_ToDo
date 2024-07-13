@@ -4,6 +4,13 @@ import { Project, Task } from "./js/classes";
 import { globalContainer } from "./js/global";
 
 
+//THE MODALS NEED VALIDATION
+//THE MODALS NEED VALIDATION
+//THE MODALS NEED VALIDATION
+//THE MODALS NEED VALIDATION
+//THE MODALS NEED VALIDATION
+//THE MODALS NEED VALIDATION
+
 //DEFAULTS NAV
 const defaultsContainer = document.querySelector('.default-navs');
 defaultsContainer.addEventListener('click', (event) => {
