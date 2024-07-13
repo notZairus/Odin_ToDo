@@ -25,11 +25,8 @@ export const globalContainer = (function() {
 
     return activeProject;
   }
-  function getAllProjects() {
-    return allProjects;
-  }
 
-  function addNewproject(project) {
+  function addNewProject(project) {
     allProjects.unshift(project);
   } 
 
@@ -95,16 +92,22 @@ export const globalContainer = (function() {
 
   } 
 
+  function deleteTask(taskTitle) {
+    let project = getActiveProject();
+    let index = project.tasks.findIndex(task => task.title == taskTitle);
+    project.tasks.splice(index, 1);
+  }
+
   return {
-    getAllProjects,
-    addNewproject,
+    addNewProject,
     addNewTask,
     clearAllProjects,
     setActiveTitle,
     getAllTask,
     getDefaultProjects,
     findProject,
-    getActiveProject
+    getActiveProject,
+    deleteTask
   }
 
 })();

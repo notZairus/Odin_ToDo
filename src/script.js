@@ -4,7 +4,6 @@ import { Project, Task } from "./js/classes";
 import { globalContainer } from "./js/global";
 
 
-
 //DEFAULTS NAV
 const defaultsContainer = document.querySelector('.default-navs');
 defaultsContainer.addEventListener('click', (event) => {
@@ -13,8 +12,7 @@ defaultsContainer.addEventListener('click', (event) => {
   if (title !== undefined) {
     DOM.activateNav(event.target.id);
     globalContainer.setActiveTitle(title);
-    let selectedProject = globalContainer.findProject(title);
-    DOM.displayTaskOfProject(selectedProject);
+    DOM.displayTaskOfProject(globalContainer.findProject(title));
   }
 })
 
@@ -64,7 +62,7 @@ createBtns.forEach(createBtn => {
       let title = document.getElementById('project-name-input').value;
   
       let newProject = new Project(title);
-      globalContainer.addNewproject(newProject);
+      globalContainer.addNewProject(newProject);
 
       document.getElementById('project-name-input').value = "";
     
@@ -81,8 +79,7 @@ createBtns.forEach(createBtn => {
       let newTask = new Task(name, description, dueDate, importance);
       globalContainer.addNewTask(newTask);
       
-      let activeProject = globalContainer.getActiveProject();
-      DOM.displayTaskOfProject(activeProject);
+      DOM.displayTaskOfProject(globalContainer.getActiveProject());
 
       document.getElementById('task-name-input').value = "";
       document.getElementById('task-description-input').value = "";

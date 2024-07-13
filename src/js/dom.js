@@ -66,12 +66,18 @@ export const DOM = (function () {
       taskk.appendChild(dueDate);
 
       let deleteBtn = document.createElement('button');
-      deleteBtn.classList.add('deletetask');
+      deleteBtn.dataset.ttitle = task.title;
+      deleteBtn.classList.add('deletetask'); 
       taskk.appendChild(deleteBtn);
 
       let trashIcon = document.createElement('img');
       trashIcon.src = trash;
       deleteBtn.appendChild(trashIcon);
+
+      deleteBtn.addEventListener('click', (event) => {
+        globalContainer.deleteTask(deleteBtn.dataset.ttitle);
+        taskContainer.removeChild(deleteBtn.parentElement);
+      })
     })
   } 
 
