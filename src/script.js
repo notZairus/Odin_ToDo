@@ -1,19 +1,24 @@
 import "./style.css";
-import { DOM } from './dom';
-import { Project, globalContainer } from "./objects";
+import { DOM } from './js/dom';
+import { Project, Task } from "./js/classes";
+import { globalContainer } from "./js/global";
 
 
-const defaultNavsContainer = document.querySelector('.default-navs');
-defaultNavsContainer.addEventListener('click', (event) => {
-  let target = event.target;
 
-  if (target.id != 'inbox' && target.id != 'week' && target.id != 'upcomming') {
-    return;
+//DEFAULTS NAV
+const defaultsContainer = document.querySelector('.default-navs');
+defaultsContainer.addEventListener('click', (event) => {
+  const title = event.target.dataset.title;
+
+  if (title !== undefined) {
+    DOM.activateNav(event.target.id);
+    globalContainer.setActiveTitle(title);
+    let selectedProject = globalContainer.findProject(title);
+    DOM.displayTaskOfProject(selectedProject);
   }
-
-  DOM.activateNav(target.id);
 })
 
+//PROJECTS NAV
 const projectContainer = document.querySelector('.project-container');
 projectContainer.addEventListener('click', (event) => {
   let target = event.target;
@@ -47,29 +52,42 @@ Array.from(closeModalBtns).forEach(btn => {
 });
 
 
-//CREATING PROJECT
-function createProject(title) {
-  let newProject = new Project(title);
-  globalContainer.addNewproject(newProject);
-  
-  const projectModal = document.getElementById('project-modal');
-  projectModal.classList.remove('show');
-
-  document.getElementById('project-name-input').value = "";
-}
+//CREATING PROJECT and TASK
 
 const createBtns = document.querySelectorAll('.create');
+
 createBtns.forEach(createBtn => {
   createBtn.addEventListener('click', (event) => {
     const target = event.target;
 
     if (target.id === 'create-project') {
       let title = document.getElementById('project-name-input').value;
-      createProject(title);
+  
+      let newProject = new Project(title);
+      globalContainer.addNewproject(newProject);
+
+      document.getElementById('project-name-input').value = "";
+    
+      const projectModal = document.getElementById('project-modal');
+      projectModal.classList.remove('show');
     }
     else if (target.id == 'create-task') {
+
+      let name = document.getElementById('task-name-input').value;
+      let description = document.getElementById('task-description-input').value;
+      let dueDate = new Date(document.getElementById('dueDate-input').value);
+      let importance = document.getElementById('priority-input').value;
+
+      let newTask = new Task(name, description, dueDate, importance);
+      globalContainer.addNewTask(newTask);
       
-      //IMPLEMENT Create Task
+      let activeProject = globalContainer.getActiveProject();
+      DOM.displayTaskOfProject(activeProject);
+
+      document.getElementById('task-name-input').value = "";
+      document.getElementById('task-description-input').value = "";
+      document.getElementById('dueDate-input').value = "";
+      document.getElementById('priority-input').value = "Extremely";
 
       const taskModal = document.getElementById('task-modal');
       taskModal.classList.remove('show');
@@ -77,14 +95,3 @@ createBtns.forEach(createBtn => {
   })
 })
 
-//DEFAULT NAVS
-const defaultsContainer = document.querySelector('.default-navs');
-defaultNavsContainer.addEventListener('click', (event) => {
-  const title = event.target.dataset.title;
-
-  if (title !== undefined) {
-    let selectedProject = Project.findDefaultProject(title);
-    DOM.displayProject(selectedProject);
-    globalContainer.setActiveTitle(title);
-  }
-})
