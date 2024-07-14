@@ -4,12 +4,18 @@ import { Project, Task } from "./js/classes";
 import { globalContainer } from "./js/global";
 
 
-//THE MODALS NEED VALIDATION
-//THE MODALS NEED VALIDATION
-//THE MODALS NEED VALIDATION
-//THE MODALS NEED VALIDATION
-//THE MODALS NEED VALIDATION
-//THE MODALS NEED VALIDATION
+window.addEventListener('DOMContentLoaded', () => {
+  DOM.activateNav('Inbox');
+  globalContainer.setActiveTitle('Inbox');
+  DOM.displayTaskOfProject(globalContainer.findProject('Inbox'));
+})
+
+function validate(value) {
+  //TRUE == INVALID
+  //FALSE == VALID
+  return value.length < 1;
+}
+
 
 //DEFAULTS NAV
 const defaultsContainer = document.querySelector('.default-navs');
@@ -67,6 +73,11 @@ createBtns.forEach(createBtn => {
 
     if (target.id === 'create-project') {
       let title = document.getElementById('project-name-input').value;
+
+      if (validate(title)) {
+        alert('Invalid Name')
+        return;
+      }
   
       let newProject = new Project(title);
       globalContainer.addNewProject(newProject);
@@ -83,6 +94,16 @@ createBtns.forEach(createBtn => {
       let dueDate = new Date(document.getElementById('dueDate-input').value);
       let importance = document.getElementById('priority-input').value;
 
+      if (validate(name)) {
+        alert('Invalid Name');
+        return;
+      }
+
+      if (isNaN(dueDate.getTime())) {
+        alert('Invalid Date');
+        return;
+      }
+
       let newTask = new Task(name, description, dueDate, importance);
       globalContainer.addNewTask(newTask);
       
@@ -98,4 +119,3 @@ createBtns.forEach(createBtn => {
     }
   })
 })
-

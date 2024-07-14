@@ -20,7 +20,7 @@ export const DOM = (function () {
 
   function activateNav(id) {
     deactiveAllNavs();
-    const targetNav = document.getElementById(id);
+    const targetNav = document.getElementById(id.toLowerCase());
     targetNav.classList.add('active');
   }
 
