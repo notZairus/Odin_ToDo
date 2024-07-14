@@ -7,7 +7,7 @@ import { globalContainer } from "./js/global";
 window.addEventListener('DOMContentLoaded', () => {
   DOM.activateNav('Inbox');
   globalContainer.setActiveTitle('Inbox');
-  DOM.displayTaskOfProject(globalContainer.findProject('Inbox'));
+  DOM.displayTaskOfProject(globalContainer.getActiveProject());
 })
 
 function validate(value) {
@@ -25,7 +25,7 @@ defaultsContainer.addEventListener('click', (event) => {
   if (target.dataset.title !== undefined) {
     DOM.activateNav(target.id);
     globalContainer.setActiveTitle(target.dataset.title);
-    DOM.displayTaskOfProject(globalContainer.findProject(target.dataset.title));
+    DOM.displayTaskOfProject(globalContainer.getActiveProject());
   }
 })
 
@@ -37,8 +37,7 @@ projectContainer.addEventListener('click', (event) => {
   if (! target.classList.contains("project-container")) {
     DOM.activateNav(target.id);
     globalContainer.setActiveTitle(target.dataset.title);
-    DOM.displayTaskOfProject(globalContainer.findProject(target.dataset.title));
-    console.log(globalContainer.getProjects());
+    DOM.displayTaskOfProject(globalContainer.getActiveProject());
   }
 })
 
@@ -65,9 +64,7 @@ Array.from(closeModalBtns).forEach(btn => {
 
 
 //CREATING PROJECT and TASK
-
 const createBtns = document.querySelectorAll('.create');
-
 createBtns.forEach(createBtn => {
   createBtn.addEventListener('click', (event) => {
     const target = event.target;

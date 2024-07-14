@@ -34,7 +34,7 @@ export const globalContainer = (function() {
 
     allProjects.forEach(project => {
       if (project.title == activeProjectTitle) {
-        project.addtask(task);
+        project.addTask(task);
       }
     })
 
@@ -47,6 +47,10 @@ export const globalContainer = (function() {
 
   function clearAllProjects() {
     allProjects = [];
+  }
+
+  function getActiveTitle() {
+    return activeProjectTitle;
   }
 
   function setActiveTitle(title) {
@@ -71,30 +75,10 @@ export const globalContainer = (function() {
     return defaultProjects;
   }
 
-  function findProject(title) {
-    let selectedProject;
-
-    defaultProjects.forEach(project => {
-      if (title == project.getTitle()) {
-        selectedProject = project;
-        return;
-      }
-    }); 
-
-    if (selectedProject != undefined) {
-      return selectedProject;
-    }
-
-    allProjects.forEach(project => {
-      if (title == project.getTitle()) {
-        selectedProject = project;
-        return;
-      }
-    }); 
-
-    return selectedProject;
-
-  } 
+  function deleteProject(projectTitle) {
+    let index = allProjects.findIndex(project => project.title === projectTitle);
+    allProjects.splice(index, 1);
+  }
 
   function deleteTask(taskTitle) {
     let project = getActiveProject();
@@ -110,8 +94,8 @@ export const globalContainer = (function() {
     getAllTask,
     getProjects,
     getDefaultProjects,
-    findProject,
     getActiveProject,
+    deleteProject,
     deleteTask
   }
 

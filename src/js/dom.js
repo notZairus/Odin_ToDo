@@ -55,7 +55,9 @@ export const DOM = (function () {
       deleteBtn.appendChild(trashIcon);
 
       deleteBtn.addEventListener('click', function(event) {
-        alert(this.dataset.title);
+        globalContainer.deleteProject(deleteBtn.dataset.title);
+        deleteBtn.parentElement.remove();
+        console.log(globalContainer.getProjects());
         event.stopPropagation();
       })
     })
