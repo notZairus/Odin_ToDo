@@ -62,6 +62,10 @@ export const globalContainer = (function() {
     })
     return allTask;
   }
+
+  function getProjects() {
+    return allProjects;
+  }
   
   function getDefaultProjects() {
     return defaultProjects;
@@ -104,6 +108,7 @@ export const globalContainer = (function() {
     clearAllProjects,
     setActiveTitle,
     getAllTask,
+    getProjects,
     getDefaultProjects,
     findProject,
     getActiveProject,

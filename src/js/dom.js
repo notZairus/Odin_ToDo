@@ -24,6 +24,43 @@ export const DOM = (function () {
     targetNav.classList.add('active');
   }
 
+  function displayProjects() {
+    const projectContainer = document.getElementById('project-container');
+    
+    while (projectContainer.firstChild) {
+      projectContainer.removeChild(projectContainer.firstChild);
+    }
+
+    let allProjects = globalContainer.getProjects();
+
+    allProjects.forEach(project => {
+      const proj = document.createElement('div');
+      proj.id = project.title.replaceAll(" ", '').toLowerCase();
+      proj.dataset.title = project.title;
+      proj.classList.add('project');
+      projectContainer.appendChild(proj);
+
+      const p = document.createElement('div');
+      p.classList.add('ignore');
+      p.textContent = project.title;
+      proj.appendChild(p);
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.dataset.title = project.title;
+      deleteBtn.classList.add('deleteproject');
+      proj.appendChild(deleteBtn);
+
+      const trashIcon = document.createElement('img');
+      trashIcon.src = trash;
+      deleteBtn.appendChild(trashIcon);
+
+      deleteBtn.addEventListener('click', function(event) {
+        alert(this.dataset.title);
+        event.stopPropagation();
+      })
+    })
+  }
+
   function displayTaskOfProject(project) {
     const header = document.querySelector('.h1-container h1');
     header.textContent = project.getTitle();
@@ -83,7 +120,8 @@ export const DOM = (function () {
 
   return {
     activateNav,
-    displayTaskOfProject
+    displayTaskOfProject,
+    displayProjects
   }
 
 })();

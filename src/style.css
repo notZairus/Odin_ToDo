@@ -126,12 +126,20 @@ sidebar .default-navs {
   background-color: whitesmoke;
   border-radius: 3px;
   padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.project p {
+.ignore {
   pointer-events: none;
+}
+
+.project .deleteproject {
+  display: flex;
+  border: none;
+  background-color: transparent;
 }
 
 .project.active {

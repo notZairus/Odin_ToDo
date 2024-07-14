@@ -20,25 +20,26 @@ function validate(value) {
 //DEFAULTS NAV
 const defaultsContainer = document.querySelector('.default-navs');
 defaultsContainer.addEventListener('click', (event) => {
-  const title = event.target.dataset.title;
+  const target = event.target
 
-  if (title !== undefined) {
-    DOM.activateNav(event.target.id);
-    globalContainer.setActiveTitle(title);
-    DOM.displayTaskOfProject(globalContainer.findProject(title));
+  if (target.dataset.title !== undefined) {
+    DOM.activateNav(target.id);
+    globalContainer.setActiveTitle(target.dataset.title);
+    DOM.displayTaskOfProject(globalContainer.findProject(target.dataset.title));
   }
 })
 
-//PROJECTS NAV
+// PROJECTS NAV
 const projectContainer = document.querySelector('.project-container');
 projectContainer.addEventListener('click', (event) => {
   let target = event.target;
 
-  if (target.classList.contains('dnav') === "project-container") {
-    return;
+  if (! target.classList.contains("project-container")) {
+    DOM.activateNav(target.id);
+    globalContainer.setActiveTitle(target.dataset.title);
+    DOM.displayTaskOfProject(globalContainer.findProject(target.dataset.title));
+    console.log(globalContainer.getProjects());
   }
-
-  DOM.activateNav(target.id);
 })
 
 
@@ -81,6 +82,7 @@ createBtns.forEach(createBtn => {
   
       let newProject = new Project(title);
       globalContainer.addNewProject(newProject);
+      DOM.displayProjects();
 
       document.getElementById('project-name-input').value = "";
     
