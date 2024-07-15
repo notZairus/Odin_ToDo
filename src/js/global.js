@@ -8,6 +8,14 @@ export const globalContainer = (function() {
   inb.addTask(new Task("TASKKKK1", "lorem isandasjndasndas", new Date(), "Extremely"));
   let defaultProjects = [inb, new Project('This Week'), new Project('Upcomming')];
 
+  function setDefaultProjects(updated) {
+    defaultProjects = updated;
+  }
+
+  function setProjects(updated) {
+    allProjects = updated;
+  }
+
   function getActiveProject() {
     let activeProject;
 
@@ -87,6 +95,8 @@ export const globalContainer = (function() {
   }
 
   return {
+    setDefaultProjects,
+    setProjects,
     addNewProject,
     addNewTask,
     clearAllProjects,
@@ -100,3 +110,9 @@ export const globalContainer = (function() {
   }
 
 })();
+
+
+export function saveData() {
+  localStorage.setItem('defaultProjects', JSON.stringify(globalContainer.getDefaultProjects()));
+  localStorage.setItem('allProjects', JSON.stringify(globalContainer.getProjects()));
+}

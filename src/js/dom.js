@@ -1,5 +1,5 @@
 import { Project, Task } from "./classes";
-import { globalContainer } from "./global";
+import { globalContainer, saveData } from "./global";
 import trash from '../assets/trash.svg';
 import { format } from 'date-fns';
 
@@ -58,12 +58,15 @@ export const DOM = (function () {
         globalContainer.deleteProject(deleteBtn.dataset.title);
         deleteBtn.parentElement.remove();
         console.log(globalContainer.getProjects());
+        saveData();
+
         event.stopPropagation();
       })
     })
   }
 
-  function displayTaskOfProject(project) {
+  function displayTaskOfProject(project) { 
+    
     const header = document.querySelector('.h1-container h1');
     header.textContent = project.getTitle();
     
@@ -116,6 +119,11 @@ export const DOM = (function () {
       deleteBtn.addEventListener('click', (event) => {
         globalContainer.deleteTask(deleteBtn.dataset.ttitle);
         taskContainer.removeChild(deleteBtn.parentElement);
+        saveData();
+      })
+
+      status.addEventListener('click', (event) => {
+        console.log('IMPLEMENT IT TOMORROW!');
       })
     })
   } 

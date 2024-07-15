@@ -1,14 +1,28 @@
+
 import "./style.css";
 import { DOM } from './js/dom';
 import { Project, Task } from "./js/classes";
-import { globalContainer } from "./js/global";
+import { globalContainer, saveData } from "./js/global";
 
 
-window.addEventListener('DOMContentLoaded', () => {
-  DOM.activateNav('Inbox');
-  globalContainer.setActiveTitle('Inbox');
+//COMPONENTS
+const defaultsContainer = document.querySelector('.default-navs');
+const projectContainer = document.querySelector('.project-container');
+
+const showProjectModalBtn = document.getElementById('showprojectmodal');
+const addTaskModalBtn = document.getElementById('addtask-btn');
+const closeModalBtns = document.querySelectorAll('.close-modal-btn');
+
+const createBtns = document.querySelectorAll('.create');
+
+
+
+//FUNCTIONS
+function displaySelectedNav(id, title) {
+  DOM.activateNav(id);
+  globalContainer.setActiveTitle(title);
   DOM.displayTaskOfProject(globalContainer.getActiveProject());
-})
+}
 
 function validate(value) {
   //TRUE == INVALID
@@ -17,54 +31,63 @@ function validate(value) {
 }
 
 
-//DEFAULTS NAV
-const defaultsContainer = document.querySelector('.default-navs');
+
+
+
+//EVENT LISTENER
+window.addEventListener('DOMContentLoaded', () => {
+  let defaultprojects = JSON.parse(localStorage.getItem('defaultProjects'));
+  let projects = JSON.parse(localStorage.getItem('allProjects'));
+
+  let genuineDefaultProject = defaultprojects.map(proj => {
+    let projectInstance = Object.create(Project.prototype);
+    return Object.assign(projectInstance, proj);
+  })
+
+  let genuineProjects = projects.map(proj => {
+    let projectInstance = Object.create(Project.prototype);
+    return Object.assign(projectInstance, proj);
+  })
+
+  globalContainer.setDefaultProjects(genuineDefaultProject);
+  globalContainer.setProjects(genuineProjects);
+
+  DOM.displayProjects();
+  displaySelectedNav("inbox", "Inbox");
+})
+
 defaultsContainer.addEventListener('click', (event) => {
   const target = event.target
 
   if (target.dataset.title !== undefined) {
-    DOM.activateNav(target.id);
-    globalContainer.setActiveTitle(target.dataset.title);
-    DOM.displayTaskOfProject(globalContainer.getActiveProject());
+    displaySelectedNav(target.id, target.dataset.title);
   }
 })
 
-// PROJECTS NAV
-const projectContainer = document.querySelector('.project-container');
 projectContainer.addEventListener('click', (event) => {
   let target = event.target;
 
   if (! target.classList.contains("project-container")) {
-    DOM.activateNav(target.id);
-    globalContainer.setActiveTitle(target.dataset.title);
-    DOM.displayTaskOfProject(globalContainer.getActiveProject());
+    displaySelectedNav(target.id, target.dataset.title);
   }
 })
 
-
-//SHOWING AND HIDING OF MODALS
-const showProjectModalBtn = document.getElementById('showprojectmodal');
 showProjectModalBtn.addEventListener('click', () => {
   const projectModal = document.getElementById('project-modal');
   projectModal.classList.add('show');
 })
 
-const addTaskModalBtn = document.getElementById('addtask-btn');
 addTaskModalBtn.addEventListener('click', () => {
   const taskModal = document.getElementById('task-modal');
   taskModal.classList.add('show');
 })
 
-const closeModalBtns = document.querySelectorAll('.close-modal-btn');
 Array.from(closeModalBtns).forEach(btn => {
   btn.addEventListener('click', () => {
     btn.parentElement.classList.remove('show');
   });
 });
 
-
-//CREATING PROJECT and TASK
-const createBtns = document.querySelectorAll('.create');
 createBtns.forEach(createBtn => {
   createBtn.addEventListener('click', (event) => {
     const target = event.target;
@@ -73,7 +96,7 @@ createBtns.forEach(createBtn => {
       let title = document.getElementById('project-name-input').value;
 
       if (validate(title)) {
-        alert('Invalid Name')
+        alert('Invalid Name');
         return;
       }
   
@@ -85,6 +108,8 @@ createBtns.forEach(createBtn => {
     
       const projectModal = document.getElementById('project-modal');
       projectModal.classList.remove('show');
+
+      saveData();
     }
     else if (target.id == 'create-task') {
 
@@ -115,6 +140,8 @@ createBtns.forEach(createBtn => {
 
       const taskModal = document.getElementById('task-modal');
       taskModal.classList.remove('show');
+
+      saveData();
     }
   })
 })
