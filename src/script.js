@@ -8,17 +8,15 @@ import { globalContainer, saveData } from "./js/global";
 //COMPONENTS
 const defaultsContainer = document.querySelector('.default-navs');
 const projectContainer = document.querySelector('.project-container');
-
 const showProjectModalBtn = document.getElementById('showprojectmodal');
 const addTaskModalBtn = document.getElementById('addtask-btn');
 const closeModalBtns = document.querySelectorAll('.close-modal-btn');
-
 const createBtns = document.querySelectorAll('.create');
 
 
 
 //FUNCTIONS
-function displaySelectedNav(id, title) {
+function displaySelectedProject(id, title) {
   DOM.activateNav(id);
   globalContainer.setActiveTitle(title);
   DOM.displayTaskOfProject(globalContainer.getActiveProject());
@@ -36,39 +34,36 @@ function validate(value) {
 
 //EVENT LISTENER
 window.addEventListener('DOMContentLoaded', () => {
-  let defaultprojects = JSON.parse(localStorage.getItem('defaultProjects'));
+  let defaultproject = JSON.parse(localStorage.getItem('defaultProject'));
   let projects = JSON.parse(localStorage.getItem('allProjects'));
+  
+  let projectInstance = Object.create(Project.prototype);
 
-  let genuineDefaultProject = defaultprojects.map(proj => {
-    let projectInstance = Object.create(Project.prototype);
-    return Object.assign(projectInstance, proj);
-  })
+  let genuineDefaultProject =  Object.assign(projectInstance, defaultproject);
 
   let genuineProjects = projects.map(proj => {
     let projectInstance = Object.create(Project.prototype);
     return Object.assign(projectInstance, proj);
   })
 
-  globalContainer.setDefaultProjects(genuineDefaultProject);
+  globalContainer.setDefaultProject(genuineDefaultProject);
   globalContainer.setProjects(genuineProjects);
 
   DOM.displayProjects();
-  displaySelectedNav("inbox", "Inbox");
+  displaySelectedProject('inbox', 'Inbox');
 })
 
 defaultsContainer.addEventListener('click', (event) => {
   const target = event.target
 
-  if (target.dataset.title !== undefined) {
-    displaySelectedNav(target.id, target.dataset.title);
-  }
+  alert('dsadad');
 })
 
 projectContainer.addEventListener('click', (event) => {
   let target = event.target;
 
   if (! target.classList.contains("project-container")) {
-    displaySelectedNav(target.id, target.dataset.title);
+    displaySelectedProject(target.id, target.dataset.title);
   }
 })
 

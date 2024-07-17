@@ -5,11 +5,10 @@ export const globalContainer = (function() {
   let activeProjectTitle = "Inbox";
   
   let inb = new Project('Inbox');
-  inb.addTask(new Task("TASKKKK1", "lorem isandasjndasndas", new Date(), "Extremely"));
-  let defaultProjects = [inb, new Project('This Week'), new Project('Upcomming')];
+  let defaultProject = new Project('Inbox');
 
-  function setDefaultProjects(updated) {
-    defaultProjects = updated;
+  function setDefaultProject(updated) {
+    defaultProject = updated;
   }
 
   function setProjects(updated) {
@@ -25,11 +24,9 @@ export const globalContainer = (function() {
       }
     })
 
-    defaultProjects.forEach(project => {
-      if (project.title == activeProjectTitle) {
-        activeProject = project;
-      }
-    })
+    if (defaultProject.getTitle() == activeProjectTitle) {
+      activeProject = defaultProject;
+    }
 
     return activeProject;
   }
@@ -40,17 +37,12 @@ export const globalContainer = (function() {
 
   function addNewTask(task) {
 
-    allProjects.forEach(project => {
-      if (project.title == activeProjectTitle) {
-        project.addTask(task);
-      }
-    })
+    let index = allProjects.findIndex(proj => proj.getTitle() == activeProjectTitle);
+    allProjects[index].addTask(task);
 
-    defaultProjects.forEach(project => {
-      if (project.title == activeProjectTitle) {
-        project.addTask(task);
-      }
-    })
+    if (defaultProject.title == activeProjectTitle) {
+      defaultProject.addTask(task);
+    }
   }
 
   function clearAllProjects() {
@@ -66,12 +58,15 @@ export const globalContainer = (function() {
   }
 
   function getAllTask() {
+
     let allTask = [];
+    
     allProjects.forEach(project => {
       project.tasks.forEach(task => {
         allTask.push(task);
       })
     })
+
     return allTask;
   }
 
@@ -79,8 +74,8 @@ export const globalContainer = (function() {
     return allProjects;
   }
   
-  function getDefaultProjects() {
-    return defaultProjects;
+  function getDefaultProject() {
+    return defaultProject;
   }
 
   function deleteProject(projectTitle) {
@@ -94,8 +89,12 @@ export const globalContainer = (function() {
     project.tasks.splice(index, 1);
   }
 
+  function completeTask(taskTitle) {
+
+  }
+
   return {
-    setDefaultProjects,
+    setDefaultProject,
     setProjects,
     addNewProject,
     addNewTask,
@@ -103,16 +102,18 @@ export const globalContainer = (function() {
     setActiveTitle,
     getAllTask,
     getProjects,
-    getDefaultProjects,
+    getDefaultProject,
     getActiveProject,
     deleteProject,
-    deleteTask
+    deleteTask,
+    completeTask,
+    getActiveTitle
   }
 
 })();
 
 
 export function saveData() {
-  localStorage.setItem('defaultProjects', JSON.stringify(globalContainer.getDefaultProjects()));
+  localStorage.setItem('defaultProject', JSON.stringify(globalContainer.getDefaultProject()));
   localStorage.setItem('allProjects', JSON.stringify(globalContainer.getProjects()));
 }
