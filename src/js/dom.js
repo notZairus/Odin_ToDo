@@ -1,137 +1,157 @@
 import { Project, Task } from "./classes";
 import { globalContainer, saveData } from "./global";
-import trash from '../assets/trash.svg';
-import { format } from 'date-fns';
-
+import trash from "../assets/trash.svg";
+import { format } from "date-fns";
 
 export const DOM = (function () {
-
   function deactiveAllNavs() {
-    const defaultNavsContainer = document.querySelector('.default-navs');
-    Array.from(defaultNavsContainer.children).forEach(element => {
-      element.classList.remove('active');
-    })
+    const defaultNavsContainer = document.querySelector(".default-navs");
+    Array.from(defaultNavsContainer.children).forEach((element) => {
+      element.classList.remove("active");
+    });
 
     const projectContainer = document.querySelector(".project-container");
-    Array.from(projectContainer.children).forEach(element => {
-      element.classList.remove('active');
-    })
+    Array.from(projectContainer.children).forEach((element) => {
+      element.classList.remove("active");
+    });
   }
 
   function activateNav(id) {
     deactiveAllNavs();
     const targetNav = document.getElementById(id.toLowerCase());
-    targetNav.classList.add('active');
+    targetNav.classList.add("active");
   }
 
   function displayProjects() {
-    const projectContainer = document.getElementById('project-container');
-    
+    const projectContainer = document.getElementById("project-container");
+
     while (projectContainer.firstChild) {
       projectContainer.removeChild(projectContainer.firstChild);
     }
 
     let allProjects = globalContainer.getProjects();
 
-    allProjects.forEach(project => {
-      const proj = document.createElement('div');
-      proj.id = project.title.replaceAll(" ", '').toLowerCase();
+    allProjects.forEach((project) => {
+      const proj = document.createElement("div");
+      proj.id = project.title.replaceAll(" ", "").toLowerCase();
       proj.dataset.title = project.title;
-      proj.classList.add('project');
+      proj.classList.add("project");
       projectContainer.appendChild(proj);
 
-      const p = document.createElement('div');
-      p.classList.add('ignore');
+      const p = document.createElement("div");
+      p.classList.add("ignore");
       p.textContent = project.title;
       proj.appendChild(p);
-      
-      const deleteBtn = document.createElement('button');
+
+      const deleteBtn = document.createElement("button");
       deleteBtn.dataset.title = project.title;
-      deleteBtn.classList.add('deleteproject');
+      deleteBtn.classList.add("deleteproject");
       proj.appendChild(deleteBtn);
 
-      const trashIcon = document.createElement('img');
+      const trashIcon = document.createElement("img");
       trashIcon.src = trash;
       deleteBtn.appendChild(trashIcon);
 
-      deleteBtn.addEventListener('click', function(event) {
+      deleteBtn.addEventListener("click", function (event) {
         globalContainer.deleteProject(deleteBtn.dataset.title);
         deleteBtn.parentElement.remove();
         console.log(globalContainer.getProjects());
         saveData();
 
         event.stopPropagation();
-      })
-    })
+      });
+    });
   }
 
-  function displayTaskOfProject(project) { 
-    
-    const header = document.querySelector('.h1-container h1');
-    header.textContent = project.getTitle();
-    
-    const taskContainer = document.querySelector('.task-container'); 
+  function clearTaskContainer() {
+    const taskContainer = document.querySelector(".task-container");
     while (taskContainer.firstChild) {
       taskContainer.removeChild(taskContainer.firstChild);
     }
+  }
 
-    project.getTasks().forEach(task => {
-      let taskk = document.createElement('div');
-      taskk.classList.add('task');
-      taskContainer.appendChild(taskk);
+  function setContentHeading(title) {
+    const header = document.querySelector(".h1-container h1");
+    header.textContent = title;
+  }
 
-      let importance = document.createElement('div');
-      importance.classList.add('importance', task.importance.toLowerCase());
-      taskk.appendChild(importance);
+  function displayTask(task) {
+    const taskContainer = document.querySelector(".task-container");
 
-      let status = document.createElement('input');
-      status.type = "checkbox";
-      taskk.appendChild(status);
+    let taskk = document.createElement("div");
+    taskk.classList.add("task");
+    taskContainer.appendChild(taskk);
 
-      let taskInfo = document.createElement('div');
-      taskInfo.classList.add("task-info");
-      taskk.appendChild(taskInfo);
+    let importance = document.createElement("div");
+    importance.classList.add("importance", task.importance.toLowerCase());
+    taskk.appendChild(importance);
 
-      let taskname = document.createElement('p');
-      taskname.textContent = task.title;
-      taskname.classList.add('taskname');
-      taskInfo.appendChild(taskname);
+    let status = document.createElement("input");
+    status.type = "checkbox";
+    taskk.appendChild(status);
 
-      let taskdescription = document.createElement('p');
-      taskdescription.textContent = task.description;
-      taskdescription.classList.add('taskdesc');
-      taskInfo.appendChild(taskdescription);
+    let taskInfo = document.createElement("div");
+    taskInfo.classList.add("task-info");
+    taskk.appendChild(taskInfo);
 
-      let dueDate = document.createElement('p');
-      dueDate.textContent = format(task.dueDate, "MMMM d");
-      dueDate.classList.add('duedate');
-      taskk.appendChild(dueDate);
+    let taskname = document.createElement("p");
+    taskname.textContent = task.title;
+    taskname.classList.add("taskname");
+    taskInfo.appendChild(taskname);
 
-      let deleteBtn = document.createElement('button');
-      deleteBtn.dataset.ttitle = task.title;
-      deleteBtn.classList.add('deletetask'); 
-      taskk.appendChild(deleteBtn);
+    let taskdescription = document.createElement("p");
+    taskdescription.textContent = task.description;
+    taskdescription.classList.add("taskdesc");
+    taskInfo.appendChild(taskdescription);
 
-      let trashIcon = document.createElement('img');
-      trashIcon.src = trash;
-      deleteBtn.appendChild(trashIcon);
+    let dueDate = document.createElement("p");
+    dueDate.textContent = format(task.dueDate, "MMM d");
+    dueDate.classList.add("duedate");
+    taskk.appendChild(dueDate);
 
-      deleteBtn.addEventListener('click', (event) => {
-        globalContainer.deleteTask(deleteBtn.dataset.ttitle);
+    let deleteBtn = document.createElement("button");
+    deleteBtn.dataset.ttitle = task.title;
+    deleteBtn.classList.add("deletetask");
+    taskk.appendChild(deleteBtn);
+
+    let trashIcon = document.createElement("img");
+    trashIcon.src = trash;
+    deleteBtn.appendChild(trashIcon);
+
+    deleteBtn.addEventListener("click", (event) => {
+      if (
+        globalContainer.getActiveTitle() !== "Inbox" &&
+        globalContainer.getActiveTitle() !== "This Week" &&
+        globalContainer.getActiveTitle() !== "Upcomming"
+      ) {
+        globalContainer.deleteTask(deleteBtn.dataset.title);
         taskContainer.removeChild(deleteBtn.parentElement);
         saveData();
-      })
+      } else {
+        console.log("asdsdad");
+      }
+    });
 
-      status.addEventListener('click', (event) => {
-        console.log('IMPLEMENT IT TOMORROW!');
-      })
-    })
-  } 
+    status.addEventListener("click", (event) => {
+      console.log("IMPLEMENT IT TOMORROW!");
+    });
+  }
+
+  function displayTaskOfProject(project) {
+    setContentHeading(project.getTitle());
+    clearTaskContainer();
+
+    project.getTasks().forEach((task) => {
+      displayTask(task);
+    });
+  }
 
   return {
     activateNav,
+    clearTaskContainer,
+    setContentHeading,
     displayTaskOfProject,
-    displayProjects
-  }
-
+    displayProjects,
+    displayTask,
+  };
 })();

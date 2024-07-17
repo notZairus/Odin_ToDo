@@ -36,13 +36,14 @@ export const globalContainer = (function() {
   } 
 
   function addNewTask(task) {
-
     let index = allProjects.findIndex(proj => proj.getTitle() == activeProjectTitle);
-    allProjects[index].addTask(task);
-
-    if (defaultProject.title == activeProjectTitle) {
-      defaultProject.addTask(task);
+    
+    if (index >= 0) {
+      allProjects[index].addTask(task);
+      return;
     }
+
+    defaultProject.addTask(task);
   }
 
   function clearAllProjects() {
@@ -58,8 +59,7 @@ export const globalContainer = (function() {
   }
 
   function getAllTask() {
-
-    let allTask = [];
+    let allTask = [...defaultProject.getTasks()];
     
     allProjects.forEach(project => {
       project.tasks.forEach(task => {
