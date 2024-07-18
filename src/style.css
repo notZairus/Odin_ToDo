@@ -300,9 +300,13 @@ main .content {
   gap: 15px;
 }
 
+.task.completed {
+  background-color: gray;
+}
+
 .task .importance {
   height: 100%;
-  width: 1%;
+  width: 2%;
   background-color: var(--primaryColor);
 }
 
@@ -335,6 +339,17 @@ main .content {
   font-size: 0.55rem;
   line-height: 0.7rem;
   text-overflow: ellipsis;
+}
+
+.importance.completed {
+  background-color: rgb(210, 209, 209);
+}
+
+.taskname.completed,
+.taskdesc.completed,
+.duedate.completed {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
 }
 
 .task .duedate {

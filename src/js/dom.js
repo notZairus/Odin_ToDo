@@ -88,6 +88,8 @@ export const DOM = (function () {
 
     let status = document.createElement("input");
     status.type = "checkbox";
+    status.dataset.title = task.title;
+    status.dataset.dueDate = task.dueDate;
     taskk.appendChild(status);
 
     let taskInfo = document.createElement("div");
@@ -119,14 +121,28 @@ export const DOM = (function () {
     trashIcon.src = trash;
     deleteBtn.appendChild(trashIcon);
 
+    function completeTask() {
+      taskname.classList.add("completed");
+      taskdescription.classList.add("completed");
+      dueDate.classList.add("completed");
+      importance.classList.add("completed");
+      status.checked = true;
+    }
+
+    if (task.completed) {
+      completeTask()
+    }
+
     deleteBtn.addEventListener("click", (event) => {
-        globalContainer.deleteTask(deleteBtn.dataset.title, deleteBtn.dataset.dueDate);
-        taskContainer.removeChild(deleteBtn.parentElement);
-        saveData();
+      globalContainer.deleteTask(deleteBtn.dataset.title, deleteBtn.dataset.dueDate);
+      taskContainer.removeChild(deleteBtn.parentElement);
+      saveData();
     });
 
     status.addEventListener("click", (event) => {
-      console.log("IMPLEMENT IT TOMORROW!");
+      globalContainer.completeTask(status.dataset.title, status.dataset.dueDate);
+      completeTask();
+      saveData();
     });
   }
 

@@ -137,7 +137,23 @@ createBtns.forEach((createBtn) => {
       let newTask = new Task(name, description, dueDate, importance);
       globalContainer.addNewTask(newTask);
 
-      DOM.displayTaskOfProject(globalContainer.getActiveProject());
+      if (
+        globalContainer.getActiveTitle() == "Inbox" ||
+        globalContainer.getActiveTitle() == "Today" ||
+        globalContainer.getActiveTitle() == "Upcomming"
+      ) {
+        DOM.clearTaskContainer();
+        let allTask = globalContainer.getAllTask();
+        let sortedTask = allTask
+          .sort((a, b) => {
+            return new Date(a.dueDate) - new Date(b.dueDate);
+          })
+          .forEach((task) => {
+            DOM.displayTask(task);
+          });
+      } else {
+        DOM.displayTaskOfProject(globalContainer.getActiveProject());
+      }
 
       document.getElementById("task-name-input").value = "";
       document.getElementById("task-description-input").value = "";

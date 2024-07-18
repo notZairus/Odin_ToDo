@@ -117,8 +117,29 @@ export const globalContainer = (function() {
   }
 
   //Completing a task
-  function completeTask(taskTitle) {
+  function completeTask(taskTitle, taskDueDate) {
+    //Attempt to complete a task on defaultProject
+    let defaultTasks = defaultProject.getTasks();
+    let taskIndex = findTaskIndex(defaultTasks, taskTitle, taskDueDate);
 
+    if (taskIndex !== -1) {
+      defaultTasks[taskIndex].completed = true;
+      return;
+    }
+
+    //Attempt to complete a task on allProjects
+    for (let i = 0; i < allProjects.length; i++) {
+      let project = allProjects[i];
+      taskIndex = findTaskIndex(project.getTasks(), taskTitle, taskDueDate);
+
+      if (taskIndex !== -1) {
+        let task = project.getTasks()[taskIndex];
+        task.completed = true;
+        return;
+      }
+    }
+
+    console.log('TASK COMPLETION PROBLEM!');
   }
 
   return {
