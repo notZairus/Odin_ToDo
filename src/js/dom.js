@@ -110,7 +110,8 @@ export const DOM = (function () {
     taskk.appendChild(dueDate);
 
     let deleteBtn = document.createElement("button");
-    deleteBtn.dataset.ttitle = task.title;
+    deleteBtn.dataset.title = task.title;
+    deleteBtn.dataset.dueDate = task.dueDate;
     deleteBtn.classList.add("deletetask");
     taskk.appendChild(deleteBtn);
 
@@ -119,17 +120,9 @@ export const DOM = (function () {
     deleteBtn.appendChild(trashIcon);
 
     deleteBtn.addEventListener("click", (event) => {
-      if (
-        globalContainer.getActiveTitle() !== "Inbox" &&
-        globalContainer.getActiveTitle() !== "This Week" &&
-        globalContainer.getActiveTitle() !== "Upcomming"
-      ) {
-        globalContainer.deleteTask(deleteBtn.dataset.title);
+        globalContainer.deleteTask(deleteBtn.dataset.title, deleteBtn.dataset.dueDate);
         taskContainer.removeChild(deleteBtn.parentElement);
         saveData();
-      } else {
-        console.log("asdsdad");
-      }
     });
 
     status.addEventListener("click", (event) => {

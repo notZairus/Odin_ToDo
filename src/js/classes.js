@@ -27,4 +27,8 @@ export class Task {
     this.importance = importance;
     this.completed = false;
   }
+
+  completeTask() {
+    this.completed = true;
+  }
 }

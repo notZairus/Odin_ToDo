@@ -78,17 +78,45 @@ export const globalContainer = (function() {
     return defaultProject;
   }
 
+  //Deleting a project
   function deleteProject(projectTitle) {
     let index = allProjects.findIndex(project => project.title === projectTitle);
     allProjects.splice(index, 1);
   }
 
-  function deleteTask(taskTitle) {
-    let project = getActiveProject();
-    let index = project.tasks.findIndex(task => task.title == taskTitle);
-    project.tasks.splice(index, 1);
+  //Deleting a task
+  function deleteTaskFromProject(project, taskIndex) {
+    project.getTasks().splice(taskIndex, 1);
+    return true;
   }
 
+  function findTaskIndex(tasks, taskTitle, taskDueDate) {
+    return tasks.findIndex(task => task.title === taskTitle && parseInt(task.dueDate) === parseInt(taskDueDate));
+  }
+
+  function deleteTask(taskTitle, taskDueDate) {
+    //Attempt to delete from defaultProject
+    let defaultTasks = defaultProject.getTasks();
+    let taskIndex = findTaskIndex(defaultTasks, taskTitle, taskDueDate);
+
+    if (taskIndex !== -1) {
+      if (deleteTaskFromProject(defaultProject, taskIndex)) return;
+    }
+    
+    //attempt to delete from allProjects
+    for (let i = 0; i < allProjects.length; i++) {
+      let project = allProjects[i];
+      taskIndex = findTaskIndex(project.getTasks(), taskTitle, taskDueDate);
+    
+      if (taskIndex !== -1) {
+        if (deleteTaskFromProject(project, taskIndex)) return;
+      }
+    }
+
+    console.log('TASK DELETION PROBLEM!');
+  }
+
+  //Completing a task
   function completeTask(taskTitle) {
 
   }
