@@ -2,6 +2,7 @@ import "./style.css";
 import { DOM } from "./js/dom";
 import { Project, Task } from "./js/classes";
 import { globalContainer, saveData } from "./js/global";
+import { format } from "date-fns";
 
 //COMPONENTS
 const defaultsContainer = document.querySelector(".default-navs");
@@ -28,12 +29,56 @@ function displayInbox() {
   let allTask = globalContainer.getAllTask();
 
   let sortedTask = allTask
-    .sort((a, b) => {
-      return new Date(a.dueDate) - new Date(b.dueDate);
-    })
+    .sort((a, b) => a.dueDate - b.dueDate)
     .forEach((task) => {
       DOM.displayTask(task);
     });
+}
+
+function displayToday() {
+  DOM.activateNav('today');
+  DOM.setContentHeading('Today');
+  DOM.clearTaskContainer();
+
+  globalContainer.setActiveTitle('Inbox');
+
+  let allTask = globalContainer.getAllTask();
+
+  let sortedTask = allTask
+    .sort((a, b) => a.dueDate - b.dueDate)
+    .filter(task => {
+      return format(new Date(), 'MMM-dd-yyyy') === format(new Date(task.dueDate), 'MMM-dd-yyyy');
+    });
+
+    sortedTask.forEach(task => {
+      DOM.displayTask(task);
+    });
+}
+
+function displayOverdue() {
+  DOM.activateNav('overdue');
+  DOM.setContentHeading('OverDue Tasks');
+  DOM.clearTaskContainer();
+
+  globalContainer.setActiveTitle("Inbox");
+
+  let allTask = globalContainer.getAllTask();
+
+  let sortedTask = allTask
+  .sort((a, b) => a.dueDate - b.dueDate)
+  .filter(task => {
+    if (
+      format(new Date(task.dueDate), "dd") < format(new Date(), "dd") && 
+      format(new Date(task.dueDate), "MMM") == format(new Date(), "MMM") &&
+      format(new Date(task.dueDate), "yyy") <= format(new Date(), "yyy")
+    ) {
+      return true;
+    }
+  })
+
+  sortedTask.forEach(task => {
+    DOM.displayTask(task);
+  })
 }
 
 function validate(value) {
@@ -67,6 +112,10 @@ defaultsContainer.addEventListener("click", (event) => {
 
   if (target.id == "inbox") {
     displayInbox();
+  } else if (target.id == "today") {
+    displayToday();
+  } else if (target.id === "overdue") {
+    displayOverdue();
   }
 });
 
@@ -137,20 +186,17 @@ createBtns.forEach((createBtn) => {
       let newTask = new Task(name, description, dueDate, importance);
       globalContainer.addNewTask(newTask);
 
-      if (
-        globalContainer.getActiveTitle() == "Inbox" ||
-        globalContainer.getActiveTitle() == "Today" ||
-        globalContainer.getActiveTitle() == "Upcomming"
-      ) {
-        DOM.clearTaskContainer();
-        let allTask = globalContainer.getAllTask();
-        let sortedTask = allTask
-          .sort((a, b) => {
-            return new Date(a.dueDate) - new Date(b.dueDate);
-          })
-          .forEach((task) => {
-            DOM.displayTask(task);
-          });
+      if (globalContainer.getActiveTitle() === "Inbox") {
+        let contentHeading = document.querySelector(".h1-container h1");
+
+        if (contentHeading.textContent === "Inbox") {
+          displayInbox();
+        } else if (contentHeading.textContent === "Today") {
+          displayToday();
+        } else if (contentHeading === "Upcomming") {
+          displayDue();
+        }
+
       } else {
         DOM.displayTaskOfProject(globalContainer.getActiveProject());
       }
